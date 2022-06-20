@@ -1,0 +1,17 @@
+datasources: 
+ datasources.yaml:
+   apiVersion: 1
+   datasources:
+   - name: Loki
+     type: loki
+     url: http://loki-loki-distributed-gateway.default.svc.cluster.local
+     isDefault: true
+persistence:
+  type: pvc
+  enabled: true
+  storageClassName: default
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+  finalizers:
+    - kubernetes.io/pvc-protection

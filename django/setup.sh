@@ -15,7 +15,11 @@ cat <<EOF
 
 Now to install notejam via helm , the values file or other parames can be used for various env settings"
 EOF
-helm install notejam notejam
+## Not proud of this
+cd kubernetes
+helm upgrade --install notejam notejam
+cd ..
+
 
 cat <<EOF 
 notejam is exposed via loadBalancer service, change the values.yaml in kubernetes folder to use another svc
@@ -28,7 +32,8 @@ notejam is exposed via loadBalancer service, change the values.yaml in kubernete
 EOF
 
 echo "Setup monitoring"
-helm upgrade --install loki-grafana grafana/grafana --values grafana-values.yaml
+helm upgrade --install loki-grafana grafana/grafana --values grafana-values.yaml 
+echo "I skipped persistence because that is too expensive in my personal cloud cluster, but persistence is how I would of course set it up in prod"
 helm upgrade --install loki grafana/loki-distributed
 ## Good example of what a badly configured values.yaml does to a dynamic install parameter aka config.clients[0].url
 helm upgrade --install promtail grafana/promtail --set "config.clients[0].url=http://loki-loki-distributed-gateway.default.svc.cluster.local/loki/api/v1/push"
